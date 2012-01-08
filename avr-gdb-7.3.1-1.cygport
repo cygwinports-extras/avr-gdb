@@ -1,0 +1,19 @@
+TOOLCHAIN_TARGET="avr"
+ORIG_PN="gdb"
+inherit toolchain
+
+DESCRIPTION="GNU Debugger for AVR toolchain"
+HOMEPAGE="http://www.gnu.org/software/gdb/"
+SRC_URI="mirror://gnu/gdb/gdb-${PV}.tar.bz2"
+PATCH_URI="config-rpath.patch"
+
+CYGCONF_ARGS="--disable-werror --with-gdb-datadir=/usr/share/gdb/${TOOLCHAIN_TARGET}"
+MAKEOPTS+=" -j1"
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	# conflicts with native gdb
+	rm -fr ${D}/usr/{include,lib}/ ${D}/usr/share/{info,locale}/
+}
